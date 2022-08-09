@@ -1,6 +1,7 @@
 package com.sparta.nightweek01.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sparta.nightweek01.dto.PostRequestDto;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
@@ -23,7 +24,6 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private String author;
 
-    @JsonIgnore
     @Column(nullable = false)
     private Long password;
 
@@ -53,6 +53,13 @@ public class Post extends Timestamped {
 
     public Long getPassword() {
         return password;
+    }
+
+    public void update(PostRequestDto requestDto){
+        this.title = requestDto.getTitle();
+        this.cotent = requestDto.getContent();
+        this.author = requestDto.getAuthor();
+        this.password = requestDto.getPassword();
     }
 
 

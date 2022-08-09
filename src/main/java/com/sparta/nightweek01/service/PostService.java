@@ -5,6 +5,7 @@ import com.sparta.nightweek01.dto.PostRequestDto;
 import com.sparta.nightweek01.dto.PostResponseDto;
 import com.sparta.nightweek01.repository.PostRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
+    @Transactional
     public PostResponseDto createPost(PostRequestDto requestDto) {
         Post post = Post.builder()
                 .title(requestDto.getTitle())
@@ -37,6 +39,7 @@ public class PostService {
                 .build();
     }
 
+    @Transactional
     public List<PostResponseDto> readPostAll() {
         List<Post> postList = postRepository.findAllByOrderByModifiedAtDesc();
         List<PostResponseDto> postResponseDto = new ArrayList<>();
@@ -55,10 +58,12 @@ public class PostService {
         return postResponseDto;
     }
 
+    @Transactional
     public PostResponseDto readPost(Long id) {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않은 게시글입니다.")
         );
+
         return PostResponseDto.builder()
                 .createdAt(post.getCreatedAt())
                 .modifiedAt(post.getModifiedAt())
@@ -67,5 +72,34 @@ public class PostService {
                 .content(post.getCotent())
                 .author(post.getAuthor())
                 .build();
+    }
+
+    @Transactional
+    public PostResponseDto updatepost(Long id, PostRequestDto requestDto) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않은 게시글입니다.")
+        );
+
+        post.update(requestDto);
+
+        return PostResponseDto.builder()
+                .createdAt(post.getCreatedAt())
+                .modifiedAt(post.getModifiedAt())
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getCotent())
+                .author(post.getAuthor())
+                .build();
+    }
+
+    @Transactional
+    public String deletepost(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않은 게시글입니다.")
+        );
+
+        postRepository.delete(post);
+
+        return "게시글이 삭제되었습니다";
     }
 }

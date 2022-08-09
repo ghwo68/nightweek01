@@ -1,6 +1,5 @@
 package com.sparta.nightweek01.controller;
 
-import com.sparta.nightweek01.domain.Post;
 import com.sparta.nightweek01.dto.PostRequestDto;
 import com.sparta.nightweek01.dto.PostResponseDto;
 import com.sparta.nightweek01.service.PostService;
@@ -17,17 +16,28 @@ public class PostController {
     }
 
     @PostMapping("/api/post")
-    private PostResponseDto createPost(@RequestBody PostRequestDto requestDto){
+    public PostResponseDto createPost(@RequestBody PostRequestDto requestDto){
         return postService.createPost(requestDto);
     }
 
     @GetMapping("/api/post")
-    private List<PostResponseDto> readPostAll(){
+    public List<PostResponseDto> readPostAll(){
         return postService.readPostAll();
     }
 
     @GetMapping("/api/post/{id}")
-    private PostResponseDto readPost(@PathVariable Long id){
+    public PostResponseDto readPost(@PathVariable Long id){
         return postService.readPost(id);
     }
+
+    @PutMapping("/api/post/{id}")
+    public PostResponseDto updatePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto){
+        return postService.updatepost(id, postRequestDto);
+    }
+
+    @DeleteMapping("/api/post/{id}")
+    public String deletePost(@PathVariable Long id){
+        return postService.deletepost(id);
+    }
+
 }
