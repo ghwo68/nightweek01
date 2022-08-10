@@ -1,6 +1,5 @@
 package com.sparta.nightweek01.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.nightweek01.dto.PostRequestDto;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -8,7 +7,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @NoArgsConstructor
-@Builder
 @Entity
 public class Post extends Timestamped {
     @Id
@@ -27,6 +25,7 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private Long password;
 
+    @Builder
     public Post(Long id, String title, String cotent, String author, Long password) {
         this.id = id;
         this.title = title;

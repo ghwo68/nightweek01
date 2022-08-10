@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PostService {
@@ -27,6 +28,13 @@ public class PostService {
                 .author(requestDto.getAuthor())
                 .password(requestDto.getPassword())
                 .build();
+
+        if (requestDto.getTitle().isEmpty()){
+            throw new RuntimeException("제목을 입력해야 합니다.");
+        }
+        if (requestDto.getContent().isEmpty()){
+            throw new RuntimeException("내용을 입력해야 합니다.");
+        }
         postRepository.save(post);
 
         return PostResponseDto.builder()
@@ -79,6 +87,18 @@ public class PostService {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않은 게시글입니다.")
         );
+
+// 왜 이코드는 실행이 안됬을까?       if (requestDto.getPassword() != post.getPassword())
+        if(!Objects.equals(requestDto.getPassword(), post.getPassword())){
+            throw new RuntimeException("비밀번호가 맞지 않습니다.");
+        }
+
+        if (requestDto.getTitle().isEmpty()){
+            throw new RuntimeException("제목을 입력해야 합니다.");
+        }
+        if (requestDto.getContent().isEmpty()){
+            throw new RuntimeException("내용을 입력해야 합니다.");
+        }
 
         post.update(requestDto);
 
