@@ -1,8 +1,12 @@
 package com.sparta.nightweek01.controller;
 
-import com.sparta.nightweek01.dto.PostRequestDto;
-import com.sparta.nightweek01.dto.PostResponseDto;
+import com.sparta.nightweek01.dto.request.PostRequestDto;
+import com.sparta.nightweek01.dto.response.PostResponseDto;
+import com.sparta.nightweek01.dto.response.PostsResponseDto;
+import com.sparta.nightweek01.dto.response.ResponseDto;
+import com.sparta.nightweek01.entity.Post;
 import com.sparta.nightweek01.service.PostService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,29 +19,49 @@ public class PostController {
         this.postService = postService;
     }
 
-    @PostMapping("/api/post")
-    public PostResponseDto createPost(@RequestBody PostRequestDto requestDto){
-        return postService.createPost(requestDto);
+    @PostMapping("/api/posts")
+    public ResponseEntity<Post> createPost(@RequestBody PostRequestDto requestDto){
+
+        Post post = postService.createPost(requestDto);
+
+        return ResponseEntity.ok()
+                .body(post);
     }
 
-    @GetMapping("/api/post")
-    public List<PostResponseDto> readPostAll(){
-        return postService.readPostAll();
+    @GetMapping("/api/posts")
+    public ResponseEntity<List<PostsResponseDto>> readPostAll(){
+
+        List<PostsResponseDto> responseDtoList = postService.readPostAll();
+
+        return ResponseEntity.ok()
+                .body(responseDtoList);
     }
 
-    @GetMapping("/api/post/{id}")
-    public PostResponseDto readPost(@PathVariable Long id){
-        return postService.readPost(id);
+    @GetMapping("/api/posts/{postId}")
+    public ResponseEntity<?> readPost(@PathVariable Long postId){
+
+        PostResponseDto responseDto = postService.readPost(postId);
+
+        return ResponseEntity.ok()
+                .body(responseDto);
     }
 
-    @PutMapping("/api/post/{id}")
-    public PostResponseDto updatePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto){
-        return postService.updatepost(id, postRequestDto);
+    @PutMapping("/api/posts/{postId}")
+    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long postId, @RequestBody PostRequestDto postRequestDto){
+
+        postService.updatepost(postId, postRequestDto);
+
+        return ResponseEntity.ok()
+                .build();
     }
 
-    @DeleteMapping("/api/post/{id}")
-    public String deletePost(@PathVariable Long id){
-        return postService.deletepost(id);
+    @DeleteMapping("/api/posts/{postId}")
+    public ResponseEntity<?> deletePost(@PathVariable Long postId){
+
+        postService.deletepost(postId);
+
+        return ResponseEntity.ok()
+                .build();
     }
 
 }

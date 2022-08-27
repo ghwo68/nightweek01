@@ -1,10 +1,10 @@
-package com.sparta.nightweek01.domain;
+package com.sparta.nightweek01.entity;
 
-import com.sparta.nightweek01.dto.PostRequestDto;
-import lombok.Builder;
+import com.sparta.nightweek01.dto.request.PostRequestDto;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor
 @Entity
@@ -23,10 +23,12 @@ public class Post extends Timestamped {
     private String author;
 
     @Column(nullable = false)
-    private Long password;
+    private String password;
 
-    @Builder
-    public Post(Long id, String title, String cotent, String author, Long password) {
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Comment> commentList;
+
+    public Post(String title, String cotent, String author, String password) {
         this.id = id;
         this.title = title;
         this.cotent = cotent;
@@ -50,8 +52,12 @@ public class Post extends Timestamped {
         return author;
     }
 
-    public Long getPassword() {
+    public String getPassword() {
         return password;
+    }
+
+    public List<Comment> getCommentList() {
+        return commentList;
     }
 
     public void update(PostRequestDto requestDto){

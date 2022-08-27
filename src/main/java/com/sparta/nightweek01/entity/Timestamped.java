@@ -1,4 +1,4 @@
-package com.sparta.nightweek01.domain;
+package com.sparta.nightweek01.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
